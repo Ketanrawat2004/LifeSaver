@@ -1,0 +1,130 @@
+{
+  "entities": {
+    "Task": {
+      "title": "Task",
+      "description": "A structured todo or goal item with priority and urgency details.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the task"
+        },
+        "title": {
+          "type": "string",
+          "description": "The description or title of the task"
+        },
+        "priority": {
+          "type": "string",
+          "description": "Priority tier of the task"
+        },
+        "deadlineTime": {
+          "type": "string",
+          "description": "ISO date string or deadline"
+        },
+        "duration": {
+          "type": "number",
+          "description": "Estimated duration in minutes"
+        },
+        "energy": {
+          "type": "string",
+          "description": "Energy level needed"
+        },
+        "completed": {
+          "type": "boolean",
+          "description": "Whether the task is completed"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "Creation timestamp in ISO format"
+        }
+      },
+      "required": ["id", "title", "priority", "deadlineTime", "duration", "energy", "completed", "createdAt"]
+    },
+    "Habit": {
+      "title": "Habit",
+      "description": "A tracked daily behavior with category and streak details.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Unique identifier of the habit"
+        },
+        "name": {
+          "type": "string",
+          "description": "The name of the habit"
+        },
+        "streak": {
+          "type": "number",
+          "description": "Current active streak of consecutive days"
+        },
+        "completedDays": {
+          "type": "array",
+          "description": "List of YYYY-MM-DD strings of completed days"
+        },
+        "category": {
+          "type": "string",
+          "description": "The category classification"
+        }
+      },
+      "required": ["id", "name", "streak", "completedDays", "category"]
+    },
+    "ChatMessage": {
+      "title": "ChatMessage",
+      "description": "A single interaction record from the AI coach chat session.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "string"
+        },
+        "role": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        },
+        "timestamp": {
+          "type": "string"
+        }
+      },
+      "required": ["id", "role", "text", "timestamp"]
+    },
+    "UserPreferences": {
+      "title": "UserPreferences",
+      "description": "Customized workspace parameters for focus sessions.",
+      "type": "object",
+      "properties": {
+        "username": {
+          "type": "string"
+        },
+        "peakFocusTime": {
+          "type": "string"
+        },
+        "dailyFocusHoursTarget": {
+          "type": "number"
+        },
+        "antiProcrastinationEnabled": {
+          "type": "boolean"
+        }
+      },
+      "required": ["username", "peakFocusTime", "dailyFocusHoursTarget", "antiProcrastinationEnabled"]
+    }
+  },
+  "firestore": {
+    "users/{userId}/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "User specific task items."
+    },
+    "users/{userId}/habits/{habitId}": {
+      "schema": "Habit",
+      "description": "User specific daily habits."
+    },
+    "users/{userId}/messages/{messageId}": {
+      "schema": "ChatMessage",
+      "description": "User specific AI coaching messaging history."
+    },
+    "users/{userId}/preferences/settings": {
+      "schema": "UserPreferences",
+      "description": "User specific workspace settings and configuration."
+    }
+  }
+}

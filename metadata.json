@@ -1,0 +1,6 @@
+{
+  "name": "LifeSaver AI",
+  "description": "An elite AI productivity coach laser-focused on helping you take action right now.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

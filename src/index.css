@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+html {
+  scroll-behavior: smooth;
+}
+
+@theme {
+  --font-sans: "Plus Jakarta Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Playfair Display", Georgia, serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+}
+
+body {
+  background-color: #F7F7F4;
+  background-image: radial-gradient(circle at 50% -20%, #FEFAF4 0%, #F4F3ED 100%);
+  background-attachment: fixed;
+  color: #2D312E;
+  min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+}
+
+/* Elegant light mode tactile containers with extremely soft shadows (Linear/Notion inspired) */
+.glass {
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(45, 49, 46, 0.06);
+  box-shadow: 0 1px 3px rgba(45, 49, 46, 0.02),
+              0 8px 30px rgba(45, 49, 46, 0.04);
+}
+
+.glass-card {
+  background: rgba(255, 255, 255, 0.95);
+  border: 1px solid rgba(45, 49, 46, 0.06);
+  box-shadow: 0 1px 2px rgba(45, 49, 46, 0.02),
+              0 10px 40px rgba(45, 49, 46, 0.04);
+}
+
+/* Ultra Soft organic glowing accents */
+.urgent-glow {
+  box-shadow: 0 0 35px rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.25) !important;
+  background: rgba(254, 242, 242, 0.95) !important;
+}
+
+.info-glow {
+  box-shadow: 0 0 35px rgba(14, 165, 233, 0.06);
+  border: 1px solid rgba(14, 165, 233, 0.2) !important;
+  background: rgba(240, 249, 255, 0.95) !important;
+}
+
+/* Perfect soft scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(45, 49, 46, 0.03);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(45, 49, 46, 0.12);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(45, 49, 46, 0.22);
+}
+
+/* Custom 3D Card tilt perspective box */
+.perspective-container {
+  perspective: 1200px;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.1s ease-out;
+}
+
+/* Ambient glow colors for organic soft light background elements */
+.ambient-circle-1 {
+  background: radial-gradient(circle, rgba(255,237,213,0.35) 0%, rgba(255,237,213,0) 70%);
+}
+.ambient-circle-2 {
+  background: radial-gradient(circle, rgba(217,249,157,0.25) 0%, rgba(217,249,157,0) 70%);
+}
+.ambient-circle-3 {
+  background: radial-gradient(circle, rgba(224,242,254,0.3) 0%, rgba(224,242,254,0) 70%);
+}

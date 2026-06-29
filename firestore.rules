@@ -1,0 +1,103 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Core security helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // Task validation
+    function isValidTask(data) {
+      return data.id is string && data.id.size() <= 128
+          && data.title is string && data.title.size() <= 256
+          && data.priority is string && (data.priority == 'critical' || data.priority == 'high' || data.priority == 'medium' || data.priority == 'low')
+          && data.deadlineTime is string && data.deadlineTime.size() <= 128
+          && (data.duration is int || data.duration is float)
+          && data.energy is string && (data.energy == 'high' || data.energy == 'medium' || data.energy == 'low')
+          && data.completed is bool
+          && data.createdAt is string && data.createdAt.size() <= 128;
+    }
+
+    // Habit validation
+    function isValidHabit(data) {
+      return data.id is string && data.id.size() <= 128
+          && data.name is string && data.name.size() <= 256
+          && data.streak is int
+          && data.completedDays is list && data.completedDays.size() <= 1000
+          && data.category is string && (data.category == 'work' || data.category == 'health' || data.category == 'mind' || data.category == 'routine');
+    }
+
+    // Chat Message validation
+    function isValidChatMessage(data) {
+      return data.id is string && data.id.size() <= 128
+          && data.role is string && (data.role == 'user' || data.role == 'assistant')
+          && data.text is string && data.text.size() <= 10000
+          && data.timestamp is string && data.timestamp.size() <= 64;
+    }
+
+    // Preferences validation
+    function isValidPreferences(data) {
+      return data.username is string && data.username.size() <= 128
+          && data.peakFocusTime is string && (data.peakFocusTime == 'morning' || data.peakFocusTime == 'afternoon' || data.peakFocusTime == 'evening')
+          && (data.dailyFocusHoursTarget is int || data.dailyFocusHoursTarget is float)
+          && data.antiProcrastinationEnabled is bool;
+    }
+
+    match /users/{userId} {
+      allow get, write: if isOwner(userId);
+
+      match /tasks/{taskId} {
+        allow get: if isOwner(userId) && isValidId(taskId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(taskId) && isValidTask(incoming());
+        allow update: if isOwner(userId) && isValidId(taskId) && isValidTask(incoming());
+        allow delete: if isOwner(userId) && isValidId(taskId);
+      }
+
+      match /habits/{habitId} {
+        allow get: if isOwner(userId) && isValidId(habitId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(habitId) && isValidHabit(incoming());
+        allow update: if isOwner(userId) && isValidId(habitId) && isValidHabit(incoming());
+        allow delete: if isOwner(userId) && isValidId(habitId);
+      }
+
+      match /messages/{messageId} {
+        allow get: if isOwner(userId) && isValidId(messageId);
+        allow list: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidId(messageId) && isValidChatMessage(incoming());
+        allow update: if isOwner(userId) && isValidId(messageId) && isValidChatMessage(incoming());
+        allow delete: if isOwner(userId) && isValidId(messageId);
+      }
+
+      match /preferences/settings {
+        allow get: if isOwner(userId);
+        allow create: if isOwner(userId) && isValidPreferences(incoming());
+        allow update: if isOwner(userId) && isValidPreferences(incoming());
+        allow delete: if isOwner(userId);
+      }
+    }
+  }
+}
